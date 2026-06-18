@@ -1,3 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beach Flags Starter</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    margin-top:80px;
+}
+
+button{
+    font-size:32px;
+    padding:20px 50px;
+}
+
+button:disabled{
+    opacity:0.7;
+}
+
+#status{
+    margin-top:40px;
+    font-size:32px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Beach Flags Starter</h1>
+
+<button id="startButton" onclick="startSequence()">
+開始
+</button>
+
+<div id="status">
+準備完了
+</div>
+
 <script>
 
 function wait(ms){
@@ -32,21 +75,18 @@ async function startSequence(){
 
     await wait(10000);
 
-    // Competitors Ready
     status.innerText = "Competitors Ready";
 
     playAudio("competitors_ready.m4a");
 
     await wait(2000);
 
-    // Heads Down
     status.innerText = "Heads Down";
 
     playAudio("heads_down.m4a");
 
     await wait(1500);
 
-    // 2～4秒ランダム
     const randomDelay =
         Math.random() * 2000 + 2000;
 
@@ -55,7 +95,6 @@ async function startSequence(){
 
     await wait(randomDelay);
 
-    // GO
     status.innerText = "GO!";
 
     playAudio("whistle.m4a");
@@ -69,3 +108,6 @@ async function startSequence(){
 }
 
 </script>
+
+</body>
+</html>
