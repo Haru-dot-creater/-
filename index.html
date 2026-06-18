@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beach Flags Starter</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    margin-top:100px;
+}
+
+button{
+    font-size:32px;
+    padding:20px 50px;
+}
+
+button:disabled{
+    opacity:0.7;
+}
+
+#status{
+    margin-top:40px;
+    font-size:30px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Beach Flags Starter</h1>
+
+<button id="startButton" onclick="startSequence()">
+開始
+</button>
+
+<div id="status">
+準備完了
+</div>
+
+<script>
+
+function wait(ms){
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function speak(text){
+
+    speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.lang = "en-US";
+    utterance.rate = 0.9;
+    utterance.pitch = 1.0;
+
+    speechSynthesis.speak(utterance);
+}
+
+function playWhistle(){
+
+    const audioContext =
+        new (window.AudioContext || window.webkitAudioContext)();
+
+    const gain = audioContext.createGain();
+    gain.connect(audioContext.destination);
+
+    const osc1 = audioContext.createOscillator();
+    const osc2 = audioContext.createOscillator();
+
+    osc1.type = "square";
+    osc2.type = "triangle";
+
+    osc1.frequency.value = 2200;
+    osc2.frequency.value = 2350;
+
+    osc1.connect(gain);
+    osc2.connect(gain);
+
+    gain.gain.setValueAtTime(
+        0.3,
+        audioContext.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        audioContext.currentTime + 0.8
+    );
+
+    osc1.start();
+    osc2.start();
+
+    osc1.stop(audioContext.currentTime + 0.8);
+    osc2.stop(audioContext.currentTime + 0.8);
+}
+
+async function startSequence(){
+
+    const button =
+        document.getElementById("startButton");
+
+    const status =
+        document.getElementById("status");
+
+    button.disabled = true;
+    button.innerText = "待機中...";
+
+    status.innerText = "10秒後に開始";
+
+    await wait(10000);
+
+    status.innerText = "Competitors Ready";
+
+    speak("Competitors Ready");
+
+    await wait(1000);
+
+    status.innerText = "Heads Down";
+
+    speak("Heads Down");
+
+    await wait(1500);
+
+    // 2〜3.5秒ランダム
+    const randomDelay =
+        Math.random() * 1500 + 1500;
+
+    status.innerText =
+        `待機時間 ${(randomDelay / 1000).toFixed(1)} 秒`;
+
+    await wait(randomDelay);
+
+    status.innerText = "GO!";
+
+    playWhistle();
+
+    await wait(1000);
+
+    status.innerText = "準備完了";
+
+    button.disabled = false;
+    button.innerText = "開始";
+}
+
+</script>
+
+</body>
+</html>
