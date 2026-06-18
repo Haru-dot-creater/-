@@ -119,7 +119,7 @@ async function startSequence(){
     speak("Competitors Ready");
 
     // 長めに待つ
-    await wait(3500);
+    await wait(2000);
 
     status.innerText = "Heads Down";
 
@@ -129,7 +129,7 @@ async function startSequence(){
 
     // 1.5〜2.5秒ランダム
     const randomDelay =
-        Math.random() * 1000 + 1500;
+        Math.random() * 1000 + 1000;
 
     status.innerText =
         `待機時間 ${(randomDelay / 1000).toFixed(1)} 秒`;
